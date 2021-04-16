@@ -1,0 +1,20 @@
+{
+  "name": "google-games-owned-parser",
+  "version": "1.0.0",
+  "description": "This reads my games owned and completed data from google docs and parses + validates it and puts in a readable format for my database",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --experimental-modules index.js",
+    "debug": "node --experimental-modules --inspect index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Steven Kingston",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0",
+    "neat-csv": "^6.0.1",
+    "node-fetch": "^2.6.1"
+  }
+}
