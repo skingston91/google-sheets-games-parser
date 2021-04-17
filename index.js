@@ -34,10 +34,6 @@ const normalizeTextToCompare = (string="") => {
     return string && string.toLowerCase().trim()
 }
 
-const santiseValues = (string="") => {
-    return string && string.trim()
-};
-
 const santisedIntl = (intlDataValue) => {
     return Object.keys(intlDataValue).reduce((accum, key) => {
         const value = intlDataValue[key]
@@ -63,9 +59,13 @@ const santisedIntl = (intlDataValue) => {
     }
 */
 
-const capitalize = (s) => {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
+const capitalize = (string) => {
+  if (typeof string !== 'string') return ''
+  const splitWords = string.split(' ')
+  const cappedWords = splitWords.map((word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1)
+  }) 
+  return cappedWords.join(' ')
 }
 
 const formatDate = (date) => {
@@ -81,20 +81,16 @@ const formatDate = (date) => {
 const reformatData = (gamesFinished) => {
     console.log('REFORMATTING');
     return gamesFinished.map((game) => {
-        console.log(game)
-        
-        return Object.keys(game).map((key) => {
-            const value = game[key]
+        Object.entries(game).map(([key, value]) => {
             const trimmedValue = value && value.trim()
-            if(key === 'Comments') return {[key]: trimmedValue || ""}
+            if(key === 'Comments') game[key] = trimmedValue || ""
             if(key === 'Date Completed') {
-                if(!value) return {[key]: ""}
-                return {[key]: formatDate(trimmedValue)}
+                if(!value) game[key] = ""
+                else game[key] = formatDate(trimmedValue)
             } 
-            else return {[key]: capitalize(trimmedValue) }
+            else game[key]= capitalize(trimmedValue)
         })
-        // go through each field (except notes*) captalize and trim all the fields
-        // if date format the date to use date timestamps
+        return game
     })
 }
 
