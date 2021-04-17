@@ -78,6 +78,7 @@ const formatDate = (date) => {
     const seconds = timeWithoutDate.split(':')[2] || '00'
     return new Date(year, month, day,hours, minutes, seconds) 
 }
+
 const reformatData = (gamesFinished) => {
     console.log('REFORMATTING');
     return gamesFinished.map((game) => {
@@ -94,54 +95,6 @@ const reformatData = (gamesFinished) => {
     })
 }
 
-// Each section which is one of us needs to be commented in and out for each run else it outputs to one file
-const extractContentFields = (games) => {
-    const extractedContent = games.map(({elevator_pitch, legal_notices, _id, pre_load, challenges}) => {
-        const challengeInfo = challenges && challenges.reduce((accum, {challenge_data}) => { 
-            const {text, title, _id: challengeId } = challenge_data
-            const key = `${_id}${challengeId.trim()}`
-            // if (text) { // BUG - can only do one at the time as they only have one id // (one at a time)
-            //     accum[key] = text && text.trim()
-            //     return accum  
-            // }
-            if(title) {// BUG - can only do one at the time as they only have one id // (one at a time)
-                accum[key] = title && title.trim()
-                return accum  
-            }
-        }, {})
-        const preloadedData = pre_load && 
-        pre_load.reduce((accum, { content, feature}) => {   // HOTFIX - only extract one element else as we need to manually put them into the right files at the moment
-                const key = `${_id}-${feature}`
-                // if (feature === "help-full") { //spilt into seperate if to have easier feature (one at a time)
-                //     accum[key] = content
-                //     return accum
-                // }
-                // if (feature === "trivia") { // one at a time 
-                //     accum[key] = content
-                //     return accum
-                // }
-                return accum
-            }, {})
-        const newData = {
-            // [`${_id}-elevator_pitch`]: elevator_pitch && elevator_pitch.trim(), // (one at a time)
-            // [`${_id}-legal_notices`]: legal_notices && legal_notices.trim(), //(one at a time)
-            // ...preloadedData // (one at a time)
-            ...challengeInfo //(one at a time)
-        }
-        return newData
-    })
-    return extractedContent;
-}
-
-const extractGameTitles = (games) => {
-    const extractedContent = games.map(({title, _id, }) => {
-        return {
-            [`${_id}-title`]: title && title.trim(),
-        }
-    })
-    // console.log(extractGameTitles)
-    return extractedContent
-}
 
 const generateCSVHeaders = (data) => {
     const firstData = data && data[0];
